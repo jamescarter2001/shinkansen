@@ -5,8 +5,8 @@
 #ifndef SHINKANSEN_SKPCH_H
 #define SHINKANSEN_SKPCH_Hx
 
-#include <arm_acle.h>
 #include <atomic>
+#include <bit>
 #include <cstddef>
 #include <exception>
 #include <functional>
@@ -14,5 +14,7 @@
 #include <string>
 #include <stdexcept>
 #include <thread>
+
+#include "core/sk_math.h"
 
 #endif //SHINKANSEN_SKPCH_H

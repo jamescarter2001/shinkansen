@@ -5,11 +5,9 @@
 #ifndef SHINKANSEN_MATH_H
 #define SHINKANSEN_MATH_H
 
-#include <skpch.h>
-
 namespace sk {
-    static bool is_power_of_two(const size_t num) {
-        return (num & (num - 1)) == 0;
+    static bool is_power_of_two(const unsigned int num) {
+        return std::has_single_bit(num);
     }
 }
 
