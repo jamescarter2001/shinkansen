@@ -8,10 +8,10 @@
 #include "ring_buffer.h"
 
 namespace sk {
-    template<typename T, typename ConsumerFunc>
+    template<typename T>
     class shinkansen {
     public:
-        shinkansen(int size, ConsumerFunc func) : m_size(size), m_ringBuffer(new ring_buffer<T>(size)), m_consumerFunc(func) {}
+        shinkansen(int size, std::function<void(T*, long)> func) : m_size(size), m_ringBuffer(size), m_consumerFunc(func) {}
         ~shinkansen() {
             stop();
         }
@@ -62,7 +62,7 @@ namespace sk {
                 }
 
                 while (currentSeq < producerSeq) {
-                    T* data = m_ringBuffer->get(++currentSeq);
+                    T* data = m_ringBuffer.get(++currentSeq);
                     m_consumerFunc(data, currentSeq);
                 }
 
@@ -70,14 +70,14 @@ namespace sk {
             }
         }
 
-        T* get(long long seq) {
-            return m_ringBuffer->get(seq);
+        T* get(unsigned long long seq) {
+            return m_ringBuffer.get(seq);
         }
     private:
         const unsigned int m_size;
         alignas(128) std::atomic_bool m_running{false};
 
-        alignas(128) struct ProducerVars {
+        alignas(128) struct PublishVars {
             long long m_cachedConsumerSeq = -1;
             long long m_nextSequence = -1;
         } m_consumer;
@@ -85,9 +85,9 @@ namespace sk {
         alignas(128) std::atomic_llong m_producerSeq = -1;
         alignas(128) std::atomic_llong m_consumerSeq = -1;
 
-        alignas(128) std::unique_ptr<ring_buffer<T>> m_ringBuffer;
+        alignas(128) ring_buffer<T> m_ringBuffer;
+        alignas(128) const std::function<void(T*, long)> m_consumerFunc;
         std::jthread m_consumerThread;
-        alignas(128) ConsumerFunc m_consumerFunc;
     };
 }
 

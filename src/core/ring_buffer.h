@@ -9,30 +9,23 @@
 
 #include "sk_math.h"
 
-#define PADDING 16
-
 namespace sk {
     template<typename T>
     class ring_buffer {
     public:
-        ring_buffer(const unsigned int size) : m_size(size), m_mask(size-1), m_ringBuffer(new T*[PADDING + size + PADDING]{nullptr}) {
+        ring_buffer(const unsigned int size) : m_size(size), m_mask(size-1), m_buffer(size) {
             if (!is_power_of_two(size)) {
                 throw std::runtime_error("ring buffer size must be a power of two.");
             }
 
-            for (int i = PADDING; i < (size + PADDING); i++) {
-                m_ringBuffer[i] = new T();
+            for (int i = 0; i < size; i++) {
+                m_buffer[i] = T{0};
             }
         }
-        ~ring_buffer() {
-            for (int i = 0; i < m_size; i++) {
-                delete m_ringBuffer[i];
-            }
-            delete[] m_ringBuffer;
-        }
+        ~ring_buffer() = default;
 
         T* get(const long long index) {
-            return m_ringBuffer[PADDING + (index & m_mask)];
+            return &m_buffer[index & m_mask];
         }
 
         [[nodiscard]] int get_size() const {
@@ -41,7 +34,7 @@ namespace sk {
     private:
         const unsigned int m_size;
         const unsigned int m_mask;
-        T **const m_ringBuffer;
+        std::vector<T> m_buffer;
     };
 } // sk
 
