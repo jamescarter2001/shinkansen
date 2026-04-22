@@ -1,6 +1,6 @@
 # Shinkansen
 
-High throughput inter-thread messaging library written in C++.
+High throughput inter-thread messaging library written in C++. Inspired by: https://github.com/LMAX-Exchange/disruptor/
 
 ## Features
 
