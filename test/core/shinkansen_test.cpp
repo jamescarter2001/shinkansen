@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../../src/core/shinkansen.h"
+#include "core/shinkansen.h"
 
 struct TestMessage {
     long value;
