@@ -3,7 +3,7 @@
 //
 
 #ifndef SHINKANSEN_SKPCH_H
-#define SHINKANSEN_SKPCH_Hx
+#define SHINKANSEN_SKPCH_H
 
 #include <atomic>
 #include <bit>
