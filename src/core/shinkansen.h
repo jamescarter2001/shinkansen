@@ -11,7 +11,7 @@ namespace sk {
     template<typename T>
     class shinkansen {
     public:
-        shinkansen(int size, std::function<void(T*, long)> func) : m_size(size), m_ringBuffer(size), m_consumerFunc(func) {}
+        shinkansen(int size, std::function<void(T*, long long)> func) : m_size(size), m_ringBuffer(size), m_consumerFunc(func) {}
         ~shinkansen() {
             stop();
         }
@@ -54,7 +54,7 @@ namespace sk {
 
         void consumeLoop() {
             long long currentSeq = m_consumerSeq.load(std::memory_order_relaxed);
-            while (m_running.load(std::memory_order_acquire)) {
+            while ( m_running.load(std::memory_order_acquire)) {
                 const long long producerSeq = m_producerSeq.load(std::memory_order_acquire);
 
                 if (currentSeq == producerSeq) {
@@ -67,6 +67,13 @@ namespace sk {
                 }
 
                 m_consumerSeq.store(currentSeq, std::memory_order_release);
+            }
+
+            // drain the rest of the messages before exiting.
+            const long long producerSeq = m_producerSeq.load(std::memory_order_acquire);
+            while (currentSeq < producerSeq) {
+                T* data = m_ringBuffer.get(++currentSeq);
+                m_consumerFunc(data, currentSeq);
             }
         }
 
@@ -86,7 +93,7 @@ namespace sk {
         alignas(128) std::atomic_llong m_consumerSeq = -1;
 
         alignas(128) ring_buffer<T> m_ringBuffer;
-        alignas(128) const std::function<void(T*, long)> m_consumerFunc;
+        const std::function<void(T*, long long)> m_consumerFunc;
         std::jthread m_consumerThread;
     };
 }

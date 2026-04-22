@@ -15,6 +15,6 @@
 #include <stdexcept>
 #include <thread>
 
-#include "core/sk_math.h"
+#include "util/sk_math.h"
 
 #endif //SHINKANSEN_SKPCH_H

@@ -9,9 +9,9 @@ struct Test {
 };
 
 int main() {
-    auto handler = [](Test* event, long seq) {
+    auto handler = [](const Test* event, const long long seq) {
         long value = event->value;
-        if ((value & (value-1)) == 0) {
+        if (sk::is_power_of_two(value)) {
             printf("%ld\n", value);
         }
     };
@@ -26,6 +26,8 @@ int main() {
         entry->andAnother = 40;
         test.publish(seq);
     }
+
+    test.stop();
 
     return 0;
 }

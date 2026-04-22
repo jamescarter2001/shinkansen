@@ -7,8 +7,6 @@
 
 #include <skpch.h>
 
-#include "sk_math.h"
-
 namespace sk {
     template<typename T>
     class ring_buffer {
