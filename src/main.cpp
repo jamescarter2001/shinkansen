@@ -9,7 +9,7 @@ struct Test {
 };
 
 int main() {
-    auto handler = [](Test* event, int seq) {
+    auto handler = [](Test* event, long seq) {
         long value = event->value;
         if ((value & (value-1)) == 0) {
             printf("%ld\n", value);

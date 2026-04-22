@@ -5,7 +5,7 @@ High throughput inter-thread messaging library written in C++.
 ## Features
 
 - Writing messages from a single producer thread.
-- Consuming messages on a separate thread for processing by downstream consumers.
+- Consuming messages on a separate thread for downstream processing.
 
 ## Architecture
 
