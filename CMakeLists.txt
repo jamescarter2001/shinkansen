@@ -3,15 +3,15 @@ project(shinkansen)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(shinkansen PRIVATE src)
+include_directories(shinkansen PRIVATE include)
 
 add_executable(shinkansen src/main.cpp
-        src/core/ring_buffer.h
-        src/skpch.h
-        src/util/sk_math.h
-        src/core/shinkansen.h)
+        include/core/ring_buffer.h
+        include/skpch.h
+        include/util/sk_math.h
+        include/core/shinkansen.h)
 
-target_precompile_headers(shinkansen PRIVATE src/skpch.h)
+target_precompile_headers(shinkansen PRIVATE include/skpch.h)
 
 ### Test ###
 
